@@ -56,12 +56,15 @@ const Home = () => {
   const [games, setGames] = useState([]);
   const [query, setQuery] = useState("");
   const [sortOption, setSortOption] = useState("rating");
+  const [genreOption, setGenreOption] = useState("all");
   const [platformOption, setPlatformOption] = useState("all");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
+  const [genreMenuOpen, setGenreMenuOpen] = useState(false);
   const [platformMenuOpen, setPlatformMenuOpen] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const sortMenuRef = useRef(null);
+  const genreMenuRef = useRef(null);
   const platformMenuRef = useRef(null);
   const fetchSequenceRef = useRef(0);
   const loadingTimeoutRef = useRef(null);
@@ -92,6 +95,13 @@ const Home = () => {
     function handleOutsideClick(event) {
       if (sortMenuRef.current && !sortMenuRef.current.contains(event.target)) {
         setSortMenuOpen(false);
+      }
+
+      if (
+        genreMenuRef.current &&
+        !genreMenuRef.current.contains(event.target)
+      ) {
+        setGenreMenuOpen(false);
       }
 
       if (
@@ -189,12 +199,58 @@ const Home = () => {
     });
   }, [query, games]);
 
-  const platformFilteredGames = useMemo(() => {
-    if (platformOption === "all") {
+  const genreOptions = useMemo(() => {
+    const genreMap = new Map();
+
+    games.forEach((game) => {
+      (game.genres || []).forEach((genre) => {
+        const value = (genre.slug || genre.name || "").trim().toLowerCase();
+        const label = (genre.name || genre.slug || "").trim();
+
+        if (value && label && !genreMap.has(value)) {
+          genreMap.set(value, label);
+        }
+      });
+    });
+
+    const rawgGenres = Array.from(genreMap, ([value, label]) => ({
+      value,
+      label,
+    })).sort((firstGenre, secondGenre) =>
+      firstGenre.label.localeCompare(secondGenre.label)
+    );
+
+    return [{ value: "all", label: "All Genres" }, ...rawgGenres];
+  }, [games]);
+
+  useEffect(() => {
+    if (
+      genreOption !== "all" &&
+      !genreOptions.some((option) => option.value === genreOption)
+    ) {
+      setGenreOption("all");
+    }
+  }, [genreOption, genreOptions]);
+
+  const genreFilteredGames = useMemo(() => {
+    if (genreOption === "all") {
       return filteredGames;
     }
 
-    return filteredGames.filter((game) => {
+    return filteredGames.filter((game) =>
+      (game.genres || []).some(
+        (genre) =>
+          (genre.slug || genre.name || "").trim().toLowerCase() === genreOption
+      )
+    );
+  }, [filteredGames, genreOption]);
+
+  const platformFilteredGames = useMemo(() => {
+    if (platformOption === "all") {
+      return genreFilteredGames;
+    }
+
+    return genreFilteredGames.filter((game) => {
       const platformNames = (game.parent_platforms || [])
         .map((item) => item.platform?.name || "")
         .join(" ")
@@ -202,7 +258,7 @@ const Home = () => {
 
       return platformNames.includes(platformOption);
     });
-  }, [filteredGames, platformOption]);
+  }, [genreFilteredGames, platformOption]);
 
   const sortedGames = useMemo(() => {
     const list = [...platformFilteredGames];
@@ -230,6 +286,9 @@ const Home = () => {
   const sortLabel =
     SORT_OPTIONS.find((option) => option.value === sortOption)?.label ||
     "Top Rated";
+  const genreLabel =
+    genreOptions.find((option) => option.value === genreOption)?.label ||
+    "All Genres";
   const platformLabel =
     PLATFORM_OPTIONS.find((option) => option.value === platformOption)?.label ||
     "All Platforms";
@@ -291,6 +350,7 @@ const Home = () => {
                     type="button"
                     onClick={() => {
                       setSortMenuOpen((previous) => !previous);
+                      setGenreMenuOpen(false);
                       setPlatformMenuOpen(false);
                     }}
                     className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -323,12 +383,51 @@ const Home = () => {
                   )}
                 </div>
 
+                <div className="relative z-50 w-44 shrink-0" ref={genreMenuRef}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setGenreMenuOpen((previous) => !previous);
+                      setSortMenuOpen(false);
+                      setPlatformMenuOpen(false);
+                    }}
+                    className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    aria-haspopup="menu"
+                    aria-expanded={genreMenuOpen}
+                  >
+                    <span className="truncate">{genreLabel}</span>
+                    <span className="text-xs text-primary">▾</span>
+                  </button>
+                  {genreMenuOpen && (
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface shadow-xl shadow-black/30">
+                      {genreOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => {
+                            setGenreOption(option.value);
+                            setGenreMenuOpen(false);
+                          }}
+                          className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
+                            genreOption === option.value
+                              ? "bg-primary/20 text-on-surface"
+                              : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
                 <div className="relative z-50 w-44 shrink-0" ref={platformMenuRef}>
                   <button
                     type="button"
                     onClick={() => {
                       setPlatformMenuOpen((previous) => !previous);
                       setSortMenuOpen(false);
+                      setGenreMenuOpen(false);
                     }}
                     className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
                     aria-haspopup="menu"

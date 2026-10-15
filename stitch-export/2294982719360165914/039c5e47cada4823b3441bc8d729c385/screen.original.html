@@ -1,0 +1,406 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>GameVault — Game Details</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            background: "#0D0F14",
+            surface: "#1B202B",
+            "surface-dim": "#111318",
+            "surface-container": "#151922",
+            "surface-container-high": "#222836",
+            primary: "#8B5CF6",
+            "primary-container": "#7C3AED",
+            secondary: "#38BDF8",
+            tertiary: "#10B981",
+            "on-surface": "#F3F4F6",
+            "on-surface-variant": "#9CA3AF",
+            "outline-variant": "#2A303C"
+          },
+          fontFamily: {
+            headline: ["Space Grotesk", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-background text-on-surface font-body antialiased selection:bg-primary selection:text-white">
+
+  <!-- Top Navigation Bar -->
+  <header class="fixed top-0 w-full z-50 bg-[#0D0F14]/90 backdrop-blur-md border-b border-outline-variant">
+    <div class="h-16 max-w-7xl mx-auto px-6 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-8">
+        <a class="flex items-center gap-2.5 text-on-surface font-headline font-bold text-xl tracking-tight hover:text-primary transition-colors" href="#">
+          <span class="w-8 h-8 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center text-primary">
+            <span class="material-symbols-outlined text-[20px]">sports_esports</span>
+          </span>
+          <span>GameVault</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-1">
+          <a class="px-3.5 py-1.5 rounded-lg text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface/60 transition-all" href="#">Home</a>
+          <a class="px-3.5 py-1.5 rounded-lg text-sm text-white bg-surface font-medium" href="#">Browse Games</a>
+          <a class="px-3.5 py-1.5 rounded-lg text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface/60 transition-all" href="#">Genres</a>
+          <a class="px-3.5 py-1.5 rounded-lg text-sm text-on-surface-variant hover:text-on-surface hover:bg-surface/60 transition-all" href="#">Studios</a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="relative hidden sm:block">
+          <span class="material-symbols-outlined absolute left-3 top-2.5 text-[18px] text-on-surface-variant">search</span>
+          <input class="pl-9 pr-4 py-1.5 w-60 rounded-lg bg-surface border border-outline-variant text-xs text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-primary transition-colors" placeholder="Search archive..." type="text">
+        </div>
+        <button class="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary-container text-white text-xs font-semibold font-headline transition-all shadow-sm flex items-center gap-1.5" type="button">
+          <span>Explore</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="pt-24 pb-20 max-w-7xl mx-auto px-6">
+
+    <!-- Breadcrumb & Back Action -->
+    <div class="mb-6 flex items-center justify-between">
+      <a class="inline-flex items-center gap-2 text-sm text-on-surface-variant hover:text-secondary transition-colors" href="#">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span>Back to Browse Archive</span>
+      </a>
+      <div class="hidden sm:flex items-center gap-2 text-xs font-headline text-on-surface-variant">
+        <span>RAWG ID: 28492</span>
+        <span>•</span>
+        <span class="text-tertiary flex items-center gap-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+          Live Synchronized
+        </span>
+      </div>
+    </div>
+
+    <!-- Header Section: Title, Release Info & Scores -->
+    <section class="mb-10 pb-8 border-b border-outline-variant">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div class="space-y-3 max-w-3xl">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-3 py-1 rounded-full bg-primary/15 text-primary border border-primary/30 text-xs font-semibold font-headline tracking-wide uppercase">Action RPG</span>
+            <span class="px-3 py-1 rounded-full bg-surface text-on-surface-variant text-xs">Open World</span>
+            <span class="px-3 py-1 rounded-full bg-surface text-on-surface-variant text-xs">Souls-like</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-headline font-bold text-on-surface tracking-tight">
+            Elden Ring
+          </h1>
+
+          <div class="flex flex-wrap items-center gap-3 text-sm text-on-surface-variant font-body">
+            <span>By <span class="text-on-surface font-semibold">FromSoftware</span></span>
+            <span>•</span>
+            <span>Published by <span class="text-on-surface font-semibold">Bandai Namco</span></span>
+            <span>•</span>
+            <span>Feb 25, 2022</span>
+          </div>
+        </div>
+
+        <!-- Scores & Action Link -->
+        <div class="flex flex-wrap items-center gap-4">
+          <!-- Metascore Card -->
+          <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface border border-outline-variant">
+            <div class="w-12 h-12 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-tertiary flex items-center justify-center font-headline font-bold text-xl">
+              96
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase font-headline tracking-wider text-on-surface">Metascore</div>
+              <div class="text-xs text-on-surface-variant">Universal Acclaim</div>
+            </div>
+          </div>
+
+          <!-- User Rating Card -->
+          <div class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface border border-outline-variant">
+            <div class="w-12 h-12 rounded-lg bg-purple-950/60 border border-primary/40 text-primary flex items-center justify-center font-headline font-bold text-xl">
+              4.8
+            </div>
+            <div>
+              <div class="text-xs font-semibold uppercase font-headline tracking-wider text-on-surface">Community Rating</div>
+              <div class="text-xs text-on-surface-variant">8,420 votes</div>
+            </div>
+          </div>
+
+          <!-- External Website Link -->
+          <a class="px-5 py-3.5 rounded-xl bg-primary hover:bg-primary-container text-white text-sm font-semibold font-headline transition-all shadow-md flex items-center gap-2" href="#" target="_blank">
+            <span class="material-symbols-outlined text-[18px]">public</span>
+            <span>Official Site</span>
+            <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visual Media Showcase: Large View with 4 Thumbnails -->
+    <section class="mb-14">
+      <div class="space-y-4">
+        <!-- Main Selected Screenshot -->
+        <div class="relative w-full aspect-[21/9] sm:aspect-[16/8] rounded-2xl overflow-hidden bg-surface-container border border-outline-variant shadow-xl">
+          <img id="mainDisplayImage" alt="Elden Ring gameplay screenshot featuring massive battle scene" class="w-full h-full object-cover transition-opacity duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOZgt1gcXuEo38wgHSvlXjAN7zX9BlWpb9ktlfmubHZnhzLa89eZOzLP96PhBZAw5zcPg4sKRMCFAnK0InjGOUKLwRp_ku4uN1dhSE5gMcZzUHnWsgG8fsuI3He8Gid3becqm8oOWvi6wGTJyf_yYFWWcOoZibfGN_GYGI3XuMm7aUfPP3lFo_LAB035RGgPvSyNPgFOiq_oPq8IbrVIS48ix4-leY9eg67eNiOy6ZzP4oVGPA9QuE">
+          <div class="absolute bottom-4 left-4 px-3 py-1.5 rounded-lg bg-[#0D0F14]/80 backdrop-blur-md border border-white/10 text-xs font-headline text-on-surface flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-secondary"></span>
+            <span id="imageCaption">Limgrave Marshlands — Open Exploration</span>
+          </div>
+        </div>
+
+        <!-- 4 Gallery Screenshots (Direct RAWG short_screenshots list) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <button class="screenshot-thumb group aspect-[16/9] rounded-xl overflow-hidden bg-surface border-2 border-secondary ring-2 ring-secondary/20 transition-all" onclick="updatePreview(this, 'https://lh3.googleusercontent.com/aida-public/AB6AXuCOZgt1gcXuEo38wgHSvlXjAN7zX9BlWpb9ktlfmubHZnhzLa89eZOzLP96PhBZAw5zcPg4sKRMCFAnK0InjGOUKLwRp_ku4uN1dhSE5gMcZzUHnWsgG8fsuI3He8Gid3becqm8oOWvi6wGTJyf_yYFWWcOoZibfGN_GYGI3XuMm7aUfPP3lFo_LAB035RGgPvSyNPgFOiq_oPq8IbrVIS48ix4-leY9eg67eNiOy6ZzP4oVGPA9QuE', 'Limgrave Marshlands — Open Exploration')" type="button">
+            <img alt="Thumbnail 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxgvfVNZaB5YQqfS72WOOBTebBM_hZbhUfaGDf58F70G17Bem8hU5-eyyL2rFBwOkZXVqx4BHq1hZ5p_68ZaCPslU8TuHSEv54ygfob9Ren3T_Nhnwz8hFrBwaLjPfB4Js-hVgnvuQinmrmmMn3QbQ32iABy7cB4LX-VuL_VsLwm_zg6WLDjtzHegiipR0yXUoaKuKq7Jbu6Fo8NpW0f_DvRTljv4Tieb0HZGWNbbE-0aDZKfoteG0">
+          </button>
+          <button class="screenshot-thumb group aspect-[16/9] rounded-xl overflow-hidden bg-surface border-2 border-transparent opacity-70 hover:opacity-100 transition-all" onclick="updatePreview(this, 'https://lh3.googleusercontent.com/aida-public/AB6AXuC6d9b_fXy2oTxDaJSP2mpFJmPqSHEvEruMvrsEh7PS33ROZaVXky2QWzm1TJdNRaGLMbkp4oufF04bZVgzjYvPp4IFIqwF35yUosNj9fPJ1SqTizI3bbAZlGyhYMn-CzbInH0vhw57JpYyPq5yPe4Y3_OM-RuO-AxNkSFdwA7GsHx5E2BViThjGPu715QhY9VT3DuWYZEwLf6zVQr7fkC9WMD-W0Tc8K0EqtzCvlHXVRuQp5QR2HaY', 'Royal Capital of Leyndell')" type="button">
+            <img alt="Thumbnail 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6d9b_fXy2oTxDaJSP2mpFJmPqSHEvEruMvrsEh7PS33ROZaVXky2QWzm1TJdNRaGLMbkp4oufF04bZVgzjYvPp4IFIqwF35yUosNj9fPJ1SqTizI3bbAZlGyhYMn-CzbInH0vhw57JpYyPq5yPe4Y3_OM-RuO-AxNkSFdwA7GsHx5E2BViThjGPu715QhY9VT3DuWYZEwLf6zVQr7fkC9WMD-W0Tc8K0EqtzCvlHXVRuQp5QR2HaY">
+          </button>
+          <button class="screenshot-thumb group aspect-[16/9] rounded-xl overflow-hidden bg-surface border-2 border-transparent opacity-70 hover:opacity-100 transition-all" onclick="updatePreview(this, 'https://lh3.googleusercontent.com/aida-public/AB6AXuDfaZ6TBC-ds6WaSKVDnv4j8qCm3xslzayHV9KXTfcZ7P_14GNJOxrl4PUhsLz7GSskbLujsLkMHc5LlArh9_KX95Uauc6eoGYOyhTedSYWw5uyADXFQeyxp-l66MvrfAfbtRdiVuolm39tp5mTMBKeSuucqdeF2UOKlCAOvAa8jgXfhtC_Q_vGkMqz9KPdzSwsjmHUEmbAoQpaUkvAZJ_CnvPTUpa1Bj5WDjvORlTM5LYho6ZeEPoj', 'Subterranean Caverns Arena')" type="button">
+            <img alt="Thumbnail 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfaZ6TBC-ds6WaSKVDnv4j8qCm3xslzayHV9KXTfcZ7P_14GNJOxrl4PUhsLz7GSskbLujsLkMHc5LlArh9_KX95Uauc6eoGYOyhTedSYWw5uyADXFQeyxp-l66MvrfAfbtRdiVuolm39tp5mTMBKeSuucqdeF2UOKlCAOvAa8jgXfhtC_Q_vGkMqz9KPdzSwsjmHUEmbAoQpaUkvAZJ_CnvPTUpa1Bj5WDjvORlTM5LYho6ZeEPoj">
+          </button>
+          <button class="screenshot-thumb group aspect-[16/9] rounded-xl overflow-hidden bg-surface border-2 border-transparent opacity-70 hover:opacity-100 transition-all" onclick="updatePreview(this, 'https://lh3.googleusercontent.com/aida-public/AB6AXuDsP3UgbcFyduWVhV5X6c43TU3sS4JBTerkM5_wfYsjnldtTnHYVrwKf2P2zoDIgX3LW8M3qyRhSDMI6zXSl0dtktyrxn_kNafe3-COsNMGZLnaCw2duiyl7PLIeAGSi52gyxchgtcqfrcayKwyNwQnFgkeWWweAl-Nn52DUhVJrheV_rDN6T2s0aLAMZY3ZrJKgzkkt03efxYmGTUxecySHrGMBDjCdVYewQoSM_vLYdILi8SIdd7-', 'Academy Spires by Moonlight')" type="button">
+            <img alt="Thumbnail 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsP3UgbcFyduWVhV5X6c43TU3sS4JBTerkM5_wfYsjnldtTnHYVrwKf2P2zoDIgX3LW8M3qyRhSDMI6zXSl0dtktyrxn_kNafe3-COsNMGZLnaCw2duiyl7PLIeAGSi52gyxchgtcqfrcayKwyNwQnFgkeWWweAl-Nn52DUhVJrheV_rDN6T2s0aLAMZY3ZrJKgzkkt03efxYmGTUxecySHrGMBDjCdVYewQoSM_vLYdILi8SIdd7-">
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2-Column Content Layout: Real API Metadata & Summary -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-10 mb-16">
+      
+      <!-- Main Column: Description from API (description_raw) -->
+      <div class="lg:col-span-8 space-y-8">
+        <div>
+          <h2 class="text-2xl font-headline font-bold text-on-surface mb-4">About the Game</h2>
+          <div class="space-y-4 text-on-surface-variant leading-relaxed text-base">
+            <p>
+              The Golden Order has been broken. Rise, Tarnished, and be guided by grace to brandish the power of the Elden Ring and become an Elden Lord in the Lands Between.
+            </p>
+            <p>
+              A vast world where open fields with a variety of situations and huge dungeons with complex and three-dimensional designs are seamlessly connected. As you explore, the joy of discovering unknown and overwhelming threats await you, leading to a high sense of accomplishment.
+            </p>
+            <p>
+              In addition to customizing the appearance of your character, you can freely combine the weapons, armor, and magic that you equip. You can develop your character according to your play style, such as increasing your muscle strength to become a strong warrior, or mastering magic.
+            </p>
+            <p>
+              A multilayered story told in fragments. An epic drama in which the various thoughts of the characters intersect in the Lands Between.
+            </p>
+          </div>
+        </div>
+
+        <!-- Available Platforms (from platforms[] array) -->
+        <div>
+          <h3 class="text-sm font-headline font-semibold uppercase tracking-wider text-on-surface mb-3">Available Platforms</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3.5 py-1.5 rounded-lg bg-surface border border-outline-variant text-xs text-on-surface font-medium flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[15px] text-secondary">computer</span>
+              PC (Windows)
+            </span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-surface border border-outline-variant text-xs text-on-surface font-medium flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[15px] text-secondary">sports_esports</span>
+              PlayStation 5
+            </span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-surface border border-outline-variant text-xs text-on-surface font-medium flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[15px] text-secondary">sports_esports</span>
+              PlayStation 4
+            </span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-surface border border-outline-variant text-xs text-on-surface font-medium flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[15px] text-secondary">videogame_asset</span>
+              Xbox Series X/S
+            </span>
+            <span class="px-3.5 py-1.5 rounded-lg bg-surface border border-outline-variant text-xs text-on-surface font-medium flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[15px] text-secondary">videogame_asset</span>
+              Xbox One
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Structured Game Information (Clean RAWG Fields) -->
+      <div class="lg:col-span-4">
+        <div class="rounded-2xl bg-surface border border-outline-variant p-6 space-y-6 sticky top-24">
+          <h2 class="text-lg font-headline font-bold text-on-surface pb-3 border-b border-outline-variant flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-[20px]">info</span>
+            <span>Game Information</span>
+          </h2>
+
+          <div class="space-y-4 text-sm divide-y divide-outline-variant/50">
+            <!-- Developer -->
+            <div class="pt-3 first:pt-0 flex items-start justify-between gap-4">
+              <span class="text-on-surface-variant">Developer</span>
+              <span class="text-on-surface font-medium text-right">FromSoftware</span>
+            </div>
+
+            <!-- Publisher -->
+            <div class="pt-3 flex items-start justify-between gap-4">
+              <span class="text-on-surface-variant">Publisher</span>
+              <span class="text-on-surface font-medium text-right">Bandai Namco</span>
+            </div>
+
+            <!-- Release Date -->
+            <div class="pt-3 flex items-start justify-between gap-4">
+              <span class="text-on-surface-variant">Release Date</span>
+              <span class="text-on-surface font-medium text-right">February 25, 2022</span>
+            </div>
+
+            <!-- Genres -->
+            <div class="pt-3 flex items-start justify-between gap-4">
+              <span class="text-on-surface-variant">Genres</span>
+              <span class="text-on-surface font-medium text-right">Action, RPG</span>
+            </div>
+
+            <!-- Average Playtime -->
+            <div class="pt-3 flex items-start justify-between gap-4">
+              <span class="text-on-surface-variant">Avg. Playtime</span>
+              <span class="text-secondary font-medium text-right font-headline">58 Hours</span>
+            </div>
+
+            <!-- Age Rating -->
+            <div class="pt-3 flex items-start justify-between gap-4">
+              <span class="text-on-surface-variant">Age Rating</span>
+              <span class="text-on-surface font-medium text-right">ESRB: Mature 17+</span>
+            </div>
+
+            <!-- RAWG API ID -->
+            <div class="pt-3 flex items-start justify-between gap-4">
+              <span class="text-on-surface-variant">API Endpoint</span>
+              <code class="px-2 py-0.5 rounded bg-surface-container text-xs text-primary font-mono">/games/28492</code>
+            </div>
+          </div>
+
+          <!-- Quick Action -->
+          <div class="pt-2">
+            <button class="w-full py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container text-on-surface border border-outline-variant text-xs font-headline font-semibold transition-colors flex items-center justify-center gap-2" type="button">
+              <span class="material-symbols-outlined text-[16px]">bookmark_border</span>
+              <span>Save to My Vault</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- More Like This (Standard API Similar / Related Games) -->
+    <section class="pt-8 border-t border-outline-variant">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h2 class="text-2xl font-headline font-bold text-on-surface">More Games Like This</h2>
+          <p class="text-sm text-on-surface-variant">Curated titles sharing similar tags and genre from the archive</p>
+        </div>
+        <a class="text-xs font-headline text-secondary hover:underline flex items-center gap-1" href="#">
+          <span>Browse all RPGs</span>
+          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+        </a>
+      </div>
+
+      <!-- 4 Responsive Similar Game Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card 1 -->
+        <a class="group rounded-2xl bg-surface border border-outline-variant overflow-hidden hover:border-primary/50 transition-all block shadow-md" href="#">
+          <div class="aspect-[16/10] overflow-hidden bg-surface-container relative">
+            <img alt="Dark Souls III" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxgvfVNZaB5YQqfS72WOOBTebBM_hZbhUfaGDf58F70G17Bem8hU5-eyyL2rFBwOkZXVqx4BHq1hZ5p_68ZaCPslU8TuHSEv54ygfob9Ren3T_Nhnwz8hFrBwaLjPfB4Js-hVgnvuQinmrmmMn3QbQ32iABy7cB4LX-VuL_VsLwm_zg6WLDjtzHegiipR0yXUoaKuKq7Jbu6Fo8NpW0f_DvRTljv4Tieb0HZGWNbbE-0aDZKfoteG0">
+            <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-tertiary text-xs font-bold font-headline border border-emerald-500/30">89</span>
+          </div>
+          <div class="p-4 space-y-1">
+            <h3 class="font-headline font-semibold text-base text-on-surface group-hover:text-primary transition-colors">Dark Souls III</h3>
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span>FromSoftware • 2016</span>
+              <span class="text-secondary">Action RPG</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2 -->
+        <a class="group rounded-2xl bg-surface border border-outline-variant overflow-hidden hover:border-primary/50 transition-all block shadow-md" href="#">
+          <div class="aspect-[16/10] overflow-hidden bg-surface-container relative">
+            <img alt="Bloodborne" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6d9b_fXy2oTxDaJSP2mpFJmPqSHEvEruMvrsEh7PS33ROZaVXky2QWzm1TJdNRaGLMbkp4oufF04bZVgzjYvPp4IFIqwF35yUosNj9fPJ1SqTizI3bbAZlGyhYMn-CzbInH0vhw57JpYyPq5yPe4Y3_OM-RuO-AxNkSFdwA7GsHx5E2BViThjGPu715QhY9VT3DuWYZEwLf6zVQr7fkC9WMD-W0Tc8K0EqtzCvlHXVRuQp5QR2HaY">
+            <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-tertiary text-xs font-bold font-headline border border-emerald-500/30">92</span>
+          </div>
+          <div class="p-4 space-y-1">
+            <h3 class="font-headline font-semibold text-base text-on-surface group-hover:text-primary transition-colors">Bloodborne</h3>
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span>FromSoftware • 2015</span>
+              <span class="text-secondary">Action RPG</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3 -->
+        <a class="group rounded-2xl bg-surface border border-outline-variant overflow-hidden hover:border-primary/50 transition-all block shadow-md" href="#">
+          <div class="aspect-[16/10] overflow-hidden bg-surface-container relative">
+            <img alt="Sekiro: Shadows Die Twice" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsP3UgbcFyduWVhV5X6c43TU3sS4JBTerkM5_wfYsjnldtTnHYVrwKf2P2zoDIgX3LW8M3qyRhSDMI6zXSl0dtktyrxn_kNafe3-COsNMGZLnaCw2duiyl7PLIeAGSi52gyxchgtcqfrcayKwyNwQnFgkeWWweAl-Nn52DUhVJrheV_rDN6T2s0aLAMZY3ZrJKgzkkt03efxYmGTUxecySHrGMBDjCdVYewQoSM_vLYdILi8SIdd7-">
+            <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-tertiary text-xs font-bold font-headline border border-emerald-500/30">91</span>
+          </div>
+          <div class="p-4 space-y-1">
+            <h3 class="font-headline font-semibold text-base text-on-surface group-hover:text-primary transition-colors">Sekiro: Shadows Die Twice</h3>
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span>FromSoftware • 2019</span>
+              <span class="text-secondary">Action Adventure</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 4 -->
+        <a class="group rounded-2xl bg-surface border border-outline-variant overflow-hidden hover:border-primary/50 transition-all block shadow-md" href="#">
+          <div class="aspect-[16/10] overflow-hidden bg-surface-container relative">
+            <img alt="Lies of P" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfaZ6TBC-ds6WaSKVDnv4j8qCm3xslzayHV9KXTfcZ7P_14GNJOxrl4PUhsLz7GSskbLujsLkMHc5LlArh9_KX95Uauc6eoGYOyhTedSYWw5uyADXFQeyxp-l66MvrfAfbtRdiVuolm39tp5mTMBKeSuucqdeF2UOKlCAOvAa8jgXfhtC_Q_vGkMqz9KPdzSwsjmHUEmbAoQpaUkvAZJ_CnvPTUpa1Bj5WDjvORlTM5LYho6ZeEPoj">
+            <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-sm text-tertiary text-xs font-bold font-headline border border-emerald-500/30">82</span>
+          </div>
+          <div class="p-4 space-y-1">
+            <h3 class="font-headline font-semibold text-base text-on-surface group-hover:text-primary transition-colors">Lies of P</h3>
+            <div class="flex items-center justify-between text-xs text-on-surface-variant">
+              <span>Round8 Studio • 2023</span>
+              <span class="text-secondary">Souls-like</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Clean Minimal Footer -->
+  <footer class="border-t border-outline-variant bg-[#0D0F14] py-12">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-on-surface-variant">
+      <div class="flex items-center gap-2 text-on-surface font-headline font-bold text-sm">
+        <span class="material-symbols-outlined text-primary text-[18px]">sports_esports</span>
+        <span>GameVault Archive</span>
+      </div>
+      <div>
+        Powered by external video game database APIs. Built with clean, modern React component architecture.
+      </div>
+      <div>
+        © 2025 GameVault. All trademarks belong to their respective publishers.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function updatePreview(button, imgUrl, caption) {
+      const mainImg = document.getElementById('mainDisplayImage');
+      const captionEl = document.getElementById('imageCaption');
+      
+      mainImg.style.opacity = '0.3';
+      setTimeout(() => {
+        mainImg.src = imgUrl;
+        captionEl.textContent = caption;
+        mainImg.style.opacity = '1';
+      }, 150);
+
+      document.querySelectorAll('.screenshot-thumb').forEach(btn => {
+        btn.classList.remove('border-secondary', 'ring-2', 'ring-secondary/20');
+        btn.classList.add('border-transparent', 'opacity-70');
+      });
+      button.classList.remove('border-transparent', 'opacity-70');
+      button.classList.add('border-secondary', 'ring-2', 'ring-secondary/20');
+    }
+  </script>
+
+</body></html>

@@ -16,6 +16,42 @@ const PLATFORM_OPTIONS = [
   { value: "nintendo", label: "Nintendo" },
 ];
 
+const SKELETON_CARD_COUNT = 8;
+const MIN_SKELETON_MS = 1000;
+
+const SKELETON_WAVE_STYLE = {
+  background:
+    "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.28) 50%, rgba(255,255,255,0) 100%)",
+  transform: "translateX(-100%)",
+  animation: "skeleton-wave 1.35s ease-in-out infinite",
+};
+
+function SkeletonBlock({ className }) {
+  return (
+    <div className={`relative overflow-hidden bg-surface-container-high ${className}`}>
+      <div className="absolute inset-0" style={SKELETON_WAVE_STYLE} />
+    </div>
+  );
+}
+
+function GameCardSkeleton() {
+  return (
+    <article className="overflow-hidden rounded-2xl border border-outline-variant bg-surface shadow-lg shadow-black/20">
+      <SkeletonBlock className="aspect-[16/9] w-full" />
+      <div className="space-y-3 p-4">
+        <SkeletonBlock className="h-3 w-20 rounded" />
+        <SkeletonBlock className="h-5 w-3/4 rounded" />
+        <SkeletonBlock className="h-3 w-1/2 rounded" />
+        <SkeletonBlock className="h-11 w-full rounded-xl" />
+        <div className="flex gap-2">
+          <SkeletonBlock className="h-6 w-20 rounded-lg" />
+          <SkeletonBlock className="h-6 w-16 rounded-lg" />
+        </div>
+      </div>
+    </article>
+  );
+}
+
 const Home = () => {
   const [games, setGames] = useState([]);
   const [query, setQuery] = useState("");
@@ -23,11 +59,21 @@ const Home = () => {
   const [platformOption, setPlatformOption] = useState("all");
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [platformMenuOpen, setPlatformMenuOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const sortMenuRef = useRef(null);
   const platformMenuRef = useRef(null);
+  const fetchSequenceRef = useRef(0);
+  const loadingTimeoutRef = useRef(null);
   const API_KEY = process.env.REACT_APP_RAWG_API_KEY;
+
+  useEffect(() => {
+    return () => {
+      if (loadingTimeoutRef.current) {
+        clearTimeout(loadingTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -66,6 +112,13 @@ const Home = () => {
   }
 
   async function fetchGames(searchTerm = "", signal) {
+    const requestId = ++fetchSequenceRef.current;
+    const startedAt = Date.now();
+
+    if (loadingTimeoutRef.current) {
+      clearTimeout(loadingTimeoutRef.current);
+    }
+
     setLoading(true);
     setError("");
 
@@ -93,14 +146,25 @@ const Home = () => {
         params,
         signal,
       });
-      setGames(data.results || []);
+      if (requestId === fetchSequenceRef.current) {
+        setGames(data.results || []);
+      }
     } catch (err) {
       if (err.name !== "CanceledError" && err.name !== "AbortError") {
-        setError("Failed to load games.");
-        setGames([]);
+        if (requestId === fetchSequenceRef.current) {
+          setError("Failed to load games.");
+          setGames([]);
+        }
       }
     } finally {
-      setLoading(false);
+      const elapsed = Date.now() - startedAt;
+      const remaining = Math.max(0, MIN_SKELETON_MS - elapsed);
+
+      loadingTimeoutRef.current = setTimeout(() => {
+        if (requestId === fetchSequenceRef.current) {
+          setLoading(false);
+        }
+      }, remaining);
     }
   }
   const filteredGames = useMemo(() => {
@@ -172,14 +236,26 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-background text-text antialiased">
+      <style>
+        {`@keyframes skeleton-wave {
+            0% {
+              transform: translateX(-100%);
+              opacity: 0;
+            }
+            40% {
+              opacity: 0.35;
+            }
+            100% {
+              transform: translateX(100%);
+              opacity: 0;
+            }
+          }`}
+      </style>
       <header className="sticky top-0 z-20 border-b border-white/10 bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
           <h1 className="text-xl font-bold tracking-tight md:text-2xl">
             GameVault
           </h1>
-          <span className="text-xs text-muted md:text-sm">
-            React Render · Stitch Migration
-          </span>
         </div>
       </header>
 
@@ -188,14 +264,13 @@ const Home = () => {
           <div className="grid gap-0 lg:grid-cols-2">
             <div className="space-y-4 p-6 md:p-10">
               <p className="text-xs uppercase tracking-[0.18em] text-secondary">
-                GameVault Video Game Archive
+                GameVault Archive
               </p>
               <h2 className="text-3xl font-extrabold leading-tight md:text-5xl">
                 Every Game. <span className="text-primary">One Archive.</span>
               </h2>
               <p className="max-w-xl text-muted">
-                Discover your next favorite game. This React page now renders
-                the Stitch-inspired UI and behavior directly in the CRA app.
+                Discover your next favorite game or revisit a classic. <br /> Know it before you buy it.
               </p>
               <form className="relative z-40 flex gap-2" onSubmit={handleSearchSubmit}>
                 <input
@@ -303,13 +378,27 @@ const Home = () => {
               {sortedGames.length} games shown
             </p>
           </div>
-          {loading && <p className="text-sm text-muted">Loading games...</p>}
-          {error && <p className="text-sm text-red-300">{error}</p>}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {sortedGames.map((game) => (
-              <GameCard key={game.id} game={game} />
-            ))}
-          </div>
+          {!loading && error && <p className="text-sm text-red-300">{error}</p>}
+
+          {loading && (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {Array.from({ length: SKELETON_CARD_COUNT }).map((_, index) => (
+                <GameCardSkeleton key={`skeleton-${index}`} />
+              ))}
+            </div>
+          )}
+
+          {!loading && !error && (
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {sortedGames.map((game) => (
+                <GameCard key={game.id} game={game} />
+              ))}
+            </div>
+          )}
+
+          {!loading && !error && sortedGames.length === 0 && (
+            <p className="mt-4 text-sm text-muted">No games found for this search.</p>
+          )}
         </section>
       </main>
     </div>

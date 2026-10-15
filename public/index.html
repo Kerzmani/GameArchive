@@ -1,9 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>React App</title>
+    <title>GameVault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              background: "#111318",
+              surface: "#1a1b21",
+              card: "#1e1f25",
+              text: "#e2e2e9",
+              muted: "#cbc3d7",
+              primary: "#d0bcff",
+              secondary: "#7bd0ff",
+              tertiary: "#4edea3"
+            }
+          }
+        }
+      };
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

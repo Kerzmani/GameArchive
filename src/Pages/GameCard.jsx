@@ -50,7 +50,7 @@ function GameCard({ game }) {
             loading="lazy"
           />
           <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-            <span className="rounded-full border border-primary/30 bg-primary/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary">
+            <span className="rounded-full bg-surface/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-on-surface-variant">
               {primaryGenre}
             </span>
             {secondaryGenre && (

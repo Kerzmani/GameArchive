@@ -27,7 +27,7 @@ const Home = () => {
   const [error, setError] = useState("");
   const sortMenuRef = useRef(null);
   const platformMenuRef = useRef(null);
-  const API_KEY = "82ab795f807a433381bd1b7af6052836";
+  const API_KEY = process.env.REACT_APP_RAWG_API_KEY;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -69,11 +69,18 @@ const Home = () => {
     setLoading(true);
     setError("");
 
+    if (!API_KEY) {
+      setError("Missing RAWG API key. Add REACT_APP_RAWG_API_KEY to your .env file.");
+      setGames([]);
+      setLoading(false);
+      return;
+    }
+
     try {
       const term = searchTerm.trim();
       const params = {
         key: API_KEY,
-        page_size: 40,
+        page_size: 20,
       };
 
       if (term) {

@@ -53,19 +53,25 @@ function GameCardSkeleton() {
 }
 
 const Home = () => {
+  const todayDateString = new Date().toISOString().slice(0, 10);
   const [games, setGames] = useState([]);
   const [query, setQuery] = useState("");
   const [sortOption, setSortOption] = useState("rating");
   const [genreOption, setGenreOption] = useState("all");
   const [platformOption, setPlatformOption] = useState("all");
+  const [minReleaseDate, setMinReleaseDate] = useState("");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState(todayDateString);
   const [sortMenuOpen, setSortMenuOpen] = useState(false);
   const [genreMenuOpen, setGenreMenuOpen] = useState(false);
   const [platformMenuOpen, setPlatformMenuOpen] = useState(false);
+  const [dateMenuOpen, setDateMenuOpen] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const sortMenuRef = useRef(null);
   const genreMenuRef = useRef(null);
   const platformMenuRef = useRef(null);
+  const dateMenuRef = useRef(null);
   const fetchSequenceRef = useRef(0);
   const loadingTimeoutRef = useRef(null);
   const API_KEY = process.env.REACT_APP_RAWG_API_KEY;
@@ -77,6 +83,49 @@ const Home = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    async function fetchEarliestReleaseDate() {
+      if (!API_KEY) {
+        return;
+      }
+
+      try {
+        const { data } = await axios.get("https://api.rawg.io/api/games", {
+          params: {
+            key: API_KEY,
+            page_size: 1,
+            ordering: "released",
+          },
+        });
+
+        const earliestFromApi = data?.results?.[0]?.released;
+        const normalizedEarliest = /^\d{4}-\d{2}-\d{2}$/.test(earliestFromApi || "")
+          ? earliestFromApi
+          : "1950-01-01";
+
+        setMinReleaseDate(normalizedEarliest);
+        setFromDate((previous) =>
+          previous && previous >= normalizedEarliest ? previous : normalizedEarliest
+        );
+      } catch (error) {
+        setMinReleaseDate("1950-01-01");
+        setFromDate((previous) => (previous && previous >= "1950-01-01" ? previous : "1950-01-01"));
+      }
+    }
+
+    fetchEarliestReleaseDate();
+  }, [API_KEY]);
+
+  useEffect(() => {
+    setToDate((previous) => {
+      if (!previous) {
+        return todayDateString;
+      }
+
+      return previous > todayDateString ? todayDateString : previous;
+    });
+  }, [todayDateString]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -109,6 +158,10 @@ const Home = () => {
         !platformMenuRef.current.contains(event.target)
       ) {
         setPlatformMenuOpen(false);
+      }
+
+      if (dateMenuRef.current && !dateMenuRef.current.contains(event.target)) {
+        setDateMenuOpen(false);
       }
     }
 
@@ -245,12 +298,32 @@ const Home = () => {
     );
   }, [filteredGames, genreOption]);
 
+  const dateFilteredGames = useMemo(() => {
+    return genreFilteredGames.filter((game) => {
+      const releaseDate = (game.released || "").slice(0, 10);
+
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(releaseDate)) {
+        return false;
+      }
+
+      if (fromDate && releaseDate < fromDate) {
+        return false;
+      }
+
+      if (toDate && releaseDate > toDate) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [genreFilteredGames, fromDate, toDate]);
+
   const platformFilteredGames = useMemo(() => {
     if (platformOption === "all") {
-      return genreFilteredGames;
+      return dateFilteredGames;
     }
 
-    return genreFilteredGames.filter((game) => {
+    return dateFilteredGames.filter((game) => {
       const platformNames = (game.parent_platforms || [])
         .map((item) => item.platform?.name || "")
         .join(" ")
@@ -258,7 +331,7 @@ const Home = () => {
 
       return platformNames.includes(platformOption);
     });
-  }, [genreFilteredGames, platformOption]);
+  }, [dateFilteredGames, platformOption]);
 
   const sortedGames = useMemo(() => {
     const list = [...platformFilteredGames];
@@ -292,6 +365,8 @@ const Home = () => {
   const platformLabel =
     PLATFORM_OPTIONS.find((option) => option.value === platformOption)?.label ||
     "All Platforms";
+  const dateRangeLabel =
+    fromDate && toDate ? `${fromDate} → ${toDate}` : "Release Range";
 
   return (
     <div className="min-h-screen bg-background text-text antialiased">
@@ -331,29 +406,35 @@ const Home = () => {
               <p className="max-w-xl text-muted">
                 Discover your next favorite game or revisit a classic. <br /> Know it before you buy it.
               </p>
-              <form className="relative z-40 flex gap-2" onSubmit={handleSearchSubmit}>
-                <input
-                  type="text"
-                  placeholder="Search games..."
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  className="w-72 shrink-0 rounded-lg border border-white/15 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
-                <button
-                  type="submit"
-                  className="rounded-lg bg-primary/20 px-4 py-2 text-sm font-semibold hover:bg-primary/30"
-                >
-                  Search
-                </button>
-                <div className="relative z-50 w-44 shrink-0" ref={sortMenuRef}>
+              <form className="relative z-40 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between" onSubmit={handleSearchSubmit}>
+                <div className="flex items-stretch gap-2">
+                  <input
+                    type="text"
+                    placeholder="Search games..."
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    className="min-w-0 rounded-lg border border-white/15 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 w-full sm:w-72"
+                  />
+                  <button
+                    type="submit"
+                    className="whitespace-nowrap rounded-lg bg-primary/20 px-4 py-2 text-sm font-semibold hover:bg-primary/30"
+                  >
+                    Search
+                  </button>
+                </div>
+                <div className="flex flex-col gap-3 items-end w-full lg:w-auto lg:min-w-[28rem]">
+                  {/* Stack 1: Sort, Genre, Platform — horizontal row */}
+                  <div className="grid w-full grid-cols-3 gap-2">
+                  <div className="relative z-50" ref={sortMenuRef}>
                   <button
                     type="button"
                     onClick={() => {
                       setSortMenuOpen((previous) => !previous);
                       setGenreMenuOpen(false);
                       setPlatformMenuOpen(false);
+                      setDateMenuOpen(false);
                     }}
-                    className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="inline-flex w-full items-center justify-between gap-2 whitespace-nowrap rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
                     aria-haspopup="menu"
                     aria-expanded={sortMenuOpen}
                   >
@@ -361,7 +442,7 @@ const Home = () => {
                     <span className="text-xs text-primary">▾</span>
                   </button>
                   {sortMenuOpen && (
-                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface shadow-xl shadow-black/30">
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
                       {SORT_OPTIONS.map((option) => (
                         <button
                           key={option.value}
@@ -370,10 +451,11 @@ const Home = () => {
                             setSortOption(option.value);
                             setSortMenuOpen(false);
                           }}
-                          className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
+                          style={{ backgroundColor: sortOption === option.value ? 'rgba(208, 188, 255, 0.2)' : '#1e1f25' }}
+                          className={`block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
                             sortOption === option.value
-                              ? "bg-primary/20 text-on-surface"
-                              : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                              ? "text-white font-medium"
+                              : "text-gray-300 hover:text-white"
                           }`}
                         >
                           {option.label}
@@ -383,15 +465,16 @@ const Home = () => {
                   )}
                 </div>
 
-                <div className="relative z-50 w-44 shrink-0" ref={genreMenuRef}>
+                <div className="relative z-50" ref={genreMenuRef}>
                   <button
                     type="button"
                     onClick={() => {
                       setGenreMenuOpen((previous) => !previous);
                       setSortMenuOpen(false);
                       setPlatformMenuOpen(false);
+                      setDateMenuOpen(false);
                     }}
-                    className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="inline-flex w-full items-center justify-between gap-2 whitespace-nowrap rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
                     aria-haspopup="menu"
                     aria-expanded={genreMenuOpen}
                   >
@@ -399,7 +482,7 @@ const Home = () => {
                     <span className="text-xs text-primary">▾</span>
                   </button>
                   {genreMenuOpen && (
-                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface shadow-xl shadow-black/30">
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
                       {genreOptions.map((option) => (
                         <button
                           key={option.value}
@@ -408,10 +491,11 @@ const Home = () => {
                             setGenreOption(option.value);
                             setGenreMenuOpen(false);
                           }}
-                          className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
+                          style={{ backgroundColor: genreOption === option.value ? 'rgba(208, 188, 255, 0.2)' : '#1e1f25' }}
+                          className={`block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
                             genreOption === option.value
-                              ? "bg-primary/20 text-on-surface"
-                              : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                              ? "text-white font-medium"
+                              : "text-gray-300 hover:text-white"
                           }`}
                         >
                           {option.label}
@@ -421,15 +505,16 @@ const Home = () => {
                   )}
                 </div>
 
-                <div className="relative z-50 w-44 shrink-0" ref={platformMenuRef}>
+                <div className="relative z-50" ref={platformMenuRef}>
                   <button
                     type="button"
                     onClick={() => {
                       setPlatformMenuOpen((previous) => !previous);
                       setSortMenuOpen(false);
                       setGenreMenuOpen(false);
+                      setDateMenuOpen(false);
                     }}
-                    className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="inline-flex w-full items-center justify-between gap-2 whitespace-nowrap rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
                     aria-haspopup="menu"
                     aria-expanded={platformMenuOpen}
                   >
@@ -437,7 +522,7 @@ const Home = () => {
                     <span className="text-xs text-primary">▾</span>
                   </button>
                   {platformMenuOpen && (
-                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg border border-outline-variant bg-surface shadow-xl shadow-black/30">
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
                       {PLATFORM_OPTIONS.map((option) => (
                         <button
                           key={option.value}
@@ -446,10 +531,11 @@ const Home = () => {
                             setPlatformOption(option.value);
                             setPlatformMenuOpen(false);
                           }}
-                          className={`block w-full px-3 py-2 text-left text-sm transition-colors ${
+                          style={{ backgroundColor: platformOption === option.value ? 'rgba(208, 188, 255, 0.2)' : '#1e1f25' }}
+                          className={`block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
                             platformOption === option.value
-                              ? "bg-primary/20 text-on-surface"
-                              : "text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface"
+                              ? "text-white font-medium"
+                              : "text-gray-300 hover:text-white"
                           }`}
                         >
                           {option.label}
@@ -458,13 +544,83 @@ const Home = () => {
                     </div>
                   )}
                 </div>
+                </div>
+                {/* Stack 2: Date Range */}
+                <div className="w-full">
+                <div className="relative z-50 w-full" ref={dateMenuRef}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDateMenuOpen((previous) => !previous);
+                      setSortMenuOpen(false);
+                      setGenreMenuOpen(false);
+                      setPlatformMenuOpen(false);
+                    }}
+                    className="inline-flex w-full items-center justify-between gap-2 whitespace-nowrap rounded-lg border border-primary/30 bg-primary/20 px-4 py-2 text-sm font-semibold text-on-surface hover:bg-primary/30 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    aria-haspopup="menu"
+                    aria-expanded={dateMenuOpen}
+                  >
+                    <span className="truncate">{dateRangeLabel}</span>
+                    <span className="text-xs text-primary">▾</span>
+                  </button>
+                  {dateMenuOpen && (
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-72 rounded-lg p-3 shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
+                      <div className="space-y-3">
+                        <label className="block">
+                          <span className="mb-1 block text-xs uppercase tracking-[0.1em] text-muted">From</span>
+                          <input
+                            type="date"
+                            value={fromDate}
+                            min={minReleaseDate || "1900-01-01"}
+                            max={toDate || todayDateString}
+                            onChange={(event) => {
+                              const nextFromDate = event.target.value;
+                              setFromDate(nextFromDate);
+
+                              if (toDate && nextFromDate && nextFromDate > toDate) {
+                                setToDate(nextFromDate);
+                              }
+                            }}
+                            className="w-full rounded-lg border border-white/15 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          />
+                        </label>
+                        <label className="block">
+                          <span className="mb-1 block text-xs uppercase tracking-[0.1em] text-muted">To</span>
+                          <input
+                            type="date"
+                            value={toDate}
+                            min={fromDate || minReleaseDate || "1900-01-01"}
+                            max={todayDateString}
+                            onChange={(event) => {
+                              const nextToDate = event.target.value;
+                              setToDate(nextToDate);
+
+                              if (fromDate && nextToDate && nextToDate < fromDate) {
+                                setFromDate(nextToDate);
+                              }
+                            }}
+                            className="w-full rounded-lg border border-white/15 bg-card px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                          />
+                        </label>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                </div>
+                {/* Stack 3: Reset */}
                 <button
                   type="button"
-                  onClick={() => setQuery("")}
-                  className="rounded-lg bg-primary/20 px-4 py-2 text-sm font-semibold hover:bg-primary/30"
+                  onClick={() => {
+                    setQuery("");
+                    setFromDate(minReleaseDate || "1900-01-01");
+                    setToDate(todayDateString);
+                    setDateMenuOpen(false);
+                  }}
+                  className="whitespace-nowrap rounded-lg bg-primary/20 px-4 py-2 text-sm font-semibold hover:bg-primary/30"
                 >
                   Reset
                 </button>
+                </div>
               </form>
             </div>
           </div>

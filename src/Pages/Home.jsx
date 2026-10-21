@@ -442,7 +442,7 @@ const Home = () => {
                     <span className="text-xs text-primary">▾</span>
                   </button>
                   {sortMenuOpen && (
-                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg bg-card border border-white/10 shadow-xl shadow-black/30">
                       {SORT_OPTIONS.map((option) => (
                         <button
                           key={option.value}
@@ -451,7 +451,7 @@ const Home = () => {
                             setSortOption(option.value);
                             setSortMenuOpen(false);
                           }}
-                          style={{ backgroundColor: sortOption === option.value ? 'rgba(208, 188, 255, 0.2)' : '#1e1f25' }}
+                          style={{ backgroundColor: '#1e1f25' }}
                           className={`block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
                             sortOption === option.value
                               ? "text-white font-medium"
@@ -482,7 +482,7 @@ const Home = () => {
                     <span className="text-xs text-primary">▾</span>
                   </button>
                   {genreMenuOpen && (
-                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg bg-card border border-white/10 shadow-xl shadow-black/30">
                       {genreOptions.map((option) => (
                         <button
                           key={option.value}
@@ -491,7 +491,7 @@ const Home = () => {
                             setGenreOption(option.value);
                             setGenreMenuOpen(false);
                           }}
-                          style={{ backgroundColor: genreOption === option.value ? 'rgba(208, 188, 255, 0.2)' : '#1e1f25' }}
+                          style={{ backgroundColor: '#1e1f25f' }}
                           className={`block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
                             genreOption === option.value
                               ? "text-white font-medium"
@@ -522,7 +522,7 @@ const Home = () => {
                     <span className="text-xs text-primary">▾</span>
                   </button>
                   {platformMenuOpen && (
-                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-full overflow-hidden rounded-lg bg-card border border-white/10 shadow-xl shadow-black/30">
                       {PLATFORM_OPTIONS.map((option) => (
                         <button
                           key={option.value}
@@ -531,7 +531,7 @@ const Home = () => {
                             setPlatformOption(option.value);
                             setPlatformMenuOpen(false);
                           }}
-                          style={{ backgroundColor: platformOption === option.value ? 'rgba(208, 188, 255, 0.2)' : '#1e1f25' }}
+                          style={{ backgroundColor: '#1e1f25' }}
                           className={`block w-full px-3 py-2 text-left text-sm transition-colors hover:bg-white/10 ${
                             platformOption === option.value
                               ? "text-white font-medium"
@@ -564,7 +564,7 @@ const Home = () => {
                     <span className="text-xs text-primary">▾</span>
                   </button>
                   {dateMenuOpen && (
-                    <div className="absolute right-0 top-full z-[120] mt-2 w-72 rounded-lg p-3 shadow-xl shadow-black/30" style={{ backgroundColor: '#1e1f25', border: '1px solid rgba(255,255,255,0.1)' }}>
+                    <div className="absolute right-0 top-full z-[120] mt-2 w-72 rounded-lg bg-card border border-white/10 p-3 shadow-xl shadow-black/30">
                       <div className="space-y-3">
                         <label className="block">
                           <span className="mb-1 block text-xs uppercase tracking-[0.1em] text-muted">From</span>

@@ -138,7 +138,7 @@ const Home = () => {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query]);
+  }, [fetchGames, query]);
 
   useEffect(() => {
     function handleOutsideClick(event) {

@@ -78,7 +78,7 @@ function GameDetails() {
     }
 
     if (!API_KEY) {
-      setError("Missing RAWG API key. Add REACT_APP_RAWG_API_KEY to your .env file.");
+      setError("Missing RAWG API key. Add RAWG_API_KEY to your .env file.");
       setLoading(false);
       setDetailsLoading(false);
       return;

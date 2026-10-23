@@ -3,7 +3,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import GameCard from "./GameCard";
 
-const API_KEY = process.env.RAWG_API_KEY;
+const API_KEY = process.env.REACT_APP_RAWG_API_KEY;
 const MIN_CARD_SKELETON_MS = 1000;
 
 const stripHtml = (html = "") =>

@@ -137,8 +137,8 @@ const Home = () => {
     return () => {
       clearTimeout(timer);
       controller.abort();
-    };
-  }, [fetchGames, query]);
+    }; //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   useEffect(() => {
     function handleOutsideClick(event) {

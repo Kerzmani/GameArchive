@@ -612,8 +612,14 @@ const Home = () => {
                   type="button"
                   onClick={() => {
                     setQuery("");
+                    setSortOption("rating");
+                    setGenreOption("all");
+                    setPlatformOption("all");
                     setFromDate(minReleaseDate || "1900-01-01");
                     setToDate(todayDateString);
+                    setSortMenuOpen(false);
+                    setGenreMenuOpen(false);
+                    setPlatformMenuOpen(false);
                     setDateMenuOpen(false);
                   }}
                   className="whitespace-nowrap rounded-lg bg-primary/20 px-4 py-2 text-sm font-semibold hover:bg-primary/30"
